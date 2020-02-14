@@ -12,10 +12,10 @@ import serial
 # import tf2api as tf2x
 # from tf2api.tfrecords import ds
 
+#Immage names + node's tty will be received as arguments
+
 wisetty = '/dev/' + sys.argv[len(sys.argv) - 1]
 baud=38400
-#Two image names + node's tty will be received as arguments
-
 
 for loop in range(1, len(sys.argv) - 1):
     photo = sys.argv[loop]
