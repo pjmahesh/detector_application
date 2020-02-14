@@ -1,6 +1,9 @@
 #!/bin/bash
 
+
 cd /home/pi/detector_application
+
+SECONDS=0
 
 if [ ! -d "/dev/serial/by-id" ] ; then
   echo -e "No devices found! Check USB connections or reboot Linux."
@@ -101,3 +104,6 @@ else
   echo "Time ends other! Time argument doesn't match also review \"crontab -e\"!"
   echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
 fi
+
+duration=$SECONDS
+echo "Time elapsed: $(($duration / 60)) min $(($duration % 60)) sec"
