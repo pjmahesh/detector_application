@@ -80,21 +80,31 @@ if [ "$min_end" -eq ${@: -1} ] ; then
     cmd_dprep="python3 dataprep.py"
     for (( x=1 ; x<$# ; x++ )) ; do
         echo -e "\nExecuting ..."
-        cmd="./a.out /dev/${DEVS[$x]} ${!x}.jpg"
-        echo -e "$cmd"
         if [ -e "/dev/${DEVS[$x]}" ] ; then
-          echo "Port ""${DEVS[$x]}"" - OK"
-          eval "$cmd"
+          echo -e "$(tput setaf 2)Port ""${DEVS[$x]}"" - OK$(tput sgr 0)"
+          #eval "$cmd"
         else
           echo -e "${!x}"" is undetectable now. Check USB connections or reboot Linux."
           exit 0
         fi
-        cmd="python3 sort_script.py ${!x}.jpg"
-        echo -e "Executing image backup script ..."
-        echo "$cmd"
+        cmd="./a.out /dev/${DEVS[$x]} ${!x}.jpg"
+        echo -e "$cmd"
+        capp_time1=$SECONDS
         eval "$cmd"
-        echo -e "Execution success!!"
-        cmd_dprep+=" ""${!x}.jpg" #${cam02}.jpg ${wisetty}"
+        capp_time2=$SECONDS
+        capp_time=`expr $capp_time2 - $capp_time1`
+        if [ $capp_time -lt 30 ]; then
+          echo -e "app.c failed to open port - ""${DEVS[$x]}""\nScript exiting ..."
+          echo -e "$(tput setaf 1)Your port </dev/${DEVS[$x]}> carrying ${!x} was present, but app.c could not open it due to some hardware/power glitch of CP2102 or the ext-USB hub! Replug and retry.$(tput sgr 0)"
+          exit 0
+        else
+          cmd="python3 sort_script.py ${!x}.jpg"
+          echo -e "Executing image backup script ..."
+          echo "$cmd"
+          eval "$cmd"
+          echo -e "Execution success!!"
+          cmd_dprep+=" ""${!x}.jpg" #${cam02}.jpg ${wisetty}"
+        fi
     done
     echo -e "\nAnalysing images for water level ...\nExecuting ..."
     cmd_dprep+=" ""${wisetty}"
