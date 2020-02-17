@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cd /home/pi/detector_application
+cd "$(dirname "$0")"
 
 SECONDS=0
 
