@@ -17,7 +17,7 @@ baud=38400
 #Two image names + node's tty will be received as arguments
 
 
-for loop in range(1, len(sys.argv)):
+for loop in range(1, len(sys.argv)-1):
     photo = sys.argv[loop]
     CAM_NUMBER = ''.join(filter(lambda i: i.isdigit(), photo))
     CUTTOFF_CSV = 'cutoff' + str (CAM_NUMBER) + '.csv'
@@ -87,7 +87,7 @@ for loop in range(1, len(sys.argv)):
         print(str (level_cm - 0.5) + ' cm - ' + str (level_cm) + ' cm' )
         if os.path.exists(wisetty):
            ser = serial.Serial( wisetty , baud)
-           print ("WSN Port : " + sys.argv[len(sys.argv) - 1 ] + " - OK\nPassed to node! Baud: " + str (baud) )
+           print ("\033[92mWSN Port : " + sys.argv[len(sys.argv) - 1 ] + " - OK\033[0m\nPassed to node! Baud: " + str (baud) )
         else:
            print ("WSN port not detectable now. Check USB connections or reboot Linux")
            sys.exit()

@@ -1,7 +1,8 @@
 #!/bin/bash
 
+#cd /home/pi/detector_application
 
-cd "$(dirname "$0")"
+#echo $(pwd)
 
 SECONDS=0
 
@@ -12,7 +13,7 @@ fi
 
 
 #camera numbers are relative to the order of arguments given. order of capture will also follow the order.
-wisetty=$(ls -l /dev/serial/by-id | grep -n "WISEGATE" | tail -c 8)
+#wisetty=$(ls -l /dev/serial/by-id | grep -n "WSN01" | tail -c 8)
 declare -a DEVS=()
 
 if [ $# -lt 2 ] ; then
@@ -55,20 +56,30 @@ echo -e "Args verified ..."
 for (( x=1 ; x<$# ; x++ )) ; do
   tty=$(ls -l /dev/serial/by-id | grep -n "${!x}" | tail -c 8)
   if [ "$tty" = "" ] ; then
-  {
-    echo "Could not find device - ""${!x}"
-    exit 0
-  }
+     echo "Could not find device - ""${!x}"
+     exit 0
   else
-    DEVS[$x]="$tty"
-    #echo -e "Device found : ""${!x}"" - ""${DEVS[$x]}"
+     DEVS[$x]="$tty"
+     #echo -e "Device found : ""${!x}"" - ""${DEVS[$x]}"
   fi
 done
 
-echo -e "All devices found ..."
+
+wisetty=$(ls -l /dev/serial/by-id | grep -n "WSN01" | tail -c 8)
+
+if [ "$wisetty" = "" ] ; then
+    echo -e "Could not find device : WSN-Node\n"
+    wisetty="N/A"
+    echo -e "Devices found:"
+else
+    echo -e "All devices found ..."
+fi
+
 for (( x=1 ; x<$# ; x++ )) ; do
-  echo -e "${!x}"" : ""${DEVS[$x]}"
+  echo -e "${!x} : ${DEVS[$x]}"
 done
+echo -e "WSN-Node : ${wisetty}"
+
 
 #echo -e ${DEVS[3]}
 
