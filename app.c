@@ -24,7 +24,8 @@ int cfgPort(char *serDevName_p, int baudRate)
 
    printf("Opening serial port dev <%s> \n", serDevName_p);
 
-   serialFd = open((char *)serDevName_p, O_RDWR | O_NOCTTY | O_NDELAY);
+   //serialFd = open((char *)serDevName_p, O_RDWR | O_NOCTTY | O_NDELAY);
+   serialFd = open((char *)serDevName_p, O_RDWR | O_NOCTTY | O_NONBLOCK | O_NDELAY);
    if (serialFd < 0)
    {
        printf("\n<%s> open(%s) failed !! - errno<%d> \n",
@@ -135,12 +136,14 @@ int __readImageFromUart(int fd, unsigned char *buff_p, int bytesToRead)
       // printf("#%d 0x%02x\n", idx, (unsigned int)buff_p[idx]);
 
       // printf("Looping byte back to the ESP32 ... \n");
+      /*
       rc = write(fd, buff_p + idx, 1);
       if (rc !=  1)
       {
           printf("Error writing to the uart port !! %d \n", rc);
           break;
       }
+      */
    }
 
    if (idx == bytesToRead)
@@ -273,6 +276,7 @@ int main(int argc, char **argv)
                printf("failed to get file size from ESP32 .. !! \n");
            }
 
+           close(serialFd);
            close(serialFd);
        }
    }

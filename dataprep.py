@@ -91,7 +91,7 @@ for loop in range(1, len(sys.argv)-1):
         else:
            print ("WSN port not detectable now. Check USB connections or reboot Linux")
            sys.exit()
-        ser.write(level_cm)
+        ser.write(str (level_cm) )
         break
 
 
