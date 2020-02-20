@@ -71,6 +71,7 @@ Likewise other image arguments.
 Port of WSN-Node attached. capp.sh will detect the port. 
 <b>If running this script manually,</b> the WSN-Node port has to be manually found out and given as arg3. 
    Eg., ttyUSB2
+   (or) Port name will be ttyWSN if udev rule is added and the WSN uart converter is preprogrammed. 
 
 <b>Note:</b>
 > Upto 9 cameras are supported now. 
