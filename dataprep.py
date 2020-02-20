@@ -100,7 +100,5 @@ for loop in range(1, len(sys.argv)-1):
     else:
         print('No water level in image - ' + photo)
         level_cm = 1000
-
-print('Sending a junk level!')
-ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
-os.system(ifserver_cmd)
+        ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 ) #sending a junk level!
+        os.system(ifserver_cmd)
