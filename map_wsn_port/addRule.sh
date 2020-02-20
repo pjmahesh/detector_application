@@ -7,7 +7,7 @@ if [ $# -lt 1 ] ; then
 fi
 
 if [[ $# -gt 1 ]]; then
-  echo -e "Warning: Extra arguments present. Will be unused.\nTaking rule file: $1"
+  echo -e "Warning: Extra arguments present. Will be unused."
 fi
 
 echo -e "Note: Run this script only one time to avoid conflicts - All udev rule files will be added with the supplied rule(s)."
