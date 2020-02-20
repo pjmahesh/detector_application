@@ -1,0 +1,2 @@
+
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", ATTRS{product}=="WSN01",  SYMLINK+="ttyWSN"

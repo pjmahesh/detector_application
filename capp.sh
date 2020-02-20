@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#cd /home/pi/detector_application
+cd /home/pi/detector_application
 
 #echo $(pwd)
 
@@ -101,14 +101,16 @@ if [ "$min_end" -eq ${@: -1} ] ; then
         cmd="./a.out /dev/${DEVS[$x]} ${!x}.jpg"
         echo -e "$cmd"
         capp_time1=$SECONDS
-        eval "$cmd"
+        resp=$($cmd | tee /dev/stderr | grep -c "failed")
+        #echo -e "Grep pattern occurance: ${resp}"
         capp_time2=$SECONDS
         capp_time=`expr $capp_time2 - $capp_time1`
-        if [ $capp_time -lt 30 ]; then
+        if [ $resp -gt 0 ]; then
           echo -e "app.c failed to open port - ""${DEVS[$x]}""\nScript exiting ..."
-          echo -e "$(tput setaf 1)Your port </dev/${DEVS[$x]}> carrying ${!x} was present, but app.c could not open it due to some hardware/power glitch of CP2102 or the ext-USB hub! Replug and retry.$(tput sgr 0)"
+          echo -e "$(tput setaf 1)Your port </dev/${DEVS[$x]}> carrying ${!x} was present, but app.c could not open it. Replug and retry.$(tput sgr 0)"
           exit 0
         else
+          echo -e "$(tput setaf 2)Capture and transfer took: $(($capp_time / 60)) min $(($capp_time % 60)) sec$(tput sgr 0)"
           cmd="python3 sort_script.py ${!x}.jpg"
           echo -e "Executing image backup script ..."
           echo "$cmd"

@@ -24,8 +24,8 @@
 > Arg2 : Camera UART(USB to TTL) hardware device name. Here ‘Camera02’
 > Arg3 : Camera UART(USB to TTL) hardware device name. Here ‘Camera03’
 > Arg4 : Camera UART(USB to TTL) hardware device name. Here ‘Camera04’
-> Arg5 (time) : Last digit of minute of current timestamp. 
-Script: addcron.sh will add a Cronjob running capp.sh every 10 minutes forever.
+> Arg5 : Last digit of minute of current timestamp. 
+         Cronjob for every 10 minutes will forever execute the script every 10 minutes.
 
 <b>Output : Eg.,</b>
 Level not detected in Camera01.jpg

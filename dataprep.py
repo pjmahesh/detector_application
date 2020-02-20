@@ -21,12 +21,12 @@ for loop in range(1, len(sys.argv)-1):
     photo = sys.argv[loop]
     CAM_NUMBER = ''.join(filter(lambda i: i.isdigit(), photo))
     CUTTOFF_CSV = 'cutoff' + str (CAM_NUMBER) + '.csv'
-    with open(CUTTOFF_CSV, 'rt') as f:
+    with open( './confs/'+ CUTTOFF_CSV , 'rt' ) as f:
         reader = csv.reader(f)
         offDict = {rows[0]:float(rows[1]) for rows in reader}
         f.close()
     CONF_CSV = 'conf' + str (CAM_NUMBER) + '.csv'
-    with open(CONF_CSV, 'rt') as f:
+    with open( './confs/'+ CONF_CSV , 'rt' ) as f:
         reader = csv.reader(f)
         confDict = {rows[0]:(float(rows[1]),float(rows[2])) for rows in reader}
         f.close()
@@ -86,14 +86,21 @@ for loop in range(1, len(sys.argv)-1):
 
         print(str (level_cm - 0.5) + ' cm - ' + str (level_cm) + ' cm' )
         if os.path.exists(wisetty):
-           ser = serial.Serial( wisetty , baud)
-           print ("\033[92mWSN Port : " + sys.argv[len(sys.argv) - 1 ] + " - OK\033[0m\nPassed to node! Baud: " + str (baud) )
+           ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
+           #subprocess.call([ifserver_cmd])
+           os.system(ifserver_cmd)
+           print ("\033[92mWSN Port : " + sys.argv[len(sys.argv) - 1 ] + " - OK\033[0m\nPassed to camera_if_server.!")
         else:
            print ("WSN port not detectable now. Check USB connections or reboot Linux")
            sys.exit()
-        ser.write(str (level_cm) )
+
         break
 
 
     else:
         print('No water level in image - ' + photo)
+        level_cm = 1000
+
+print('Sending a junk level!')
+ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
+os.system(ifserver_cmd)

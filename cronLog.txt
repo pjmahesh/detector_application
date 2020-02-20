@@ -1,0 +1,41 @@
+Opening serial port dev </dev/ttyUSB1> 
+Sending cmd capture to the EPS32 ... 
+Reading 8 bytes from ESP32 
+Read byte 0  0x3c 
+Read byte 1  0x30 
+Read byte 2  0x34 
+Read byte 3  0x34 
+Read byte 4  0x38 
+Read byte 5  0x30 
+Read byte 6  0x30 
+Read byte 7  0x3e 
+__readPort read 8 bytes 
+ESP32 sent <044800> 
+File size is 44800 bytes 
+Rcvd 1 bytes so far ... 
+Rcvd 10001 bytes so far ... 
+Rcvd 20001 bytes so far ... 
+Rcvd 30001 bytes so far ... 
+Rcvd 40001 bytes so far ... 
+Rcvd the full file of 44800 bytes ... 
+Received complete file from ESP32 ... writing to FS 
+
+<__writeFileToFS> rc<44800> 
+written file to FS 
+Done ...... exiting .... 
+tput: No value for $TERM and no -T specified
+tput: No value for $TERM and no -T specified
+Capture and transfer took: 0 min 4 sec
+Executing image backup script ...
+python3 sort_script.py Camera04.jpg
+Saved duplicate: Camera04.jpg to Images/20200219_164017_Camera04/20200219_164017_Camera04.jpg
+Execution success!!
+
+Analysing images for water level ...
+Executing ...
+python3 dataprep.py Camera01.jpg Camera02.jpg Camera03.jpg Camera04.jpg ttyUSB4
+No water level in image - Camera01.jpg
+No water level in image - Camera02.jpg
+No water level in image - Camera03.jpg
+No water level in image - Camera04.jpg
+Time elapsed: 0 min 59 sec
