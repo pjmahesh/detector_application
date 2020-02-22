@@ -206,7 +206,7 @@ int __writeFileToFS(unsigned char *buff_p, int fileSz, int fd)
    while (bytesLeft > 0)
    {
       rc = write(fd, buff_p + bytesWritten, bytesLeft);
-      printf("\n<%s> rc<%d> \n", __FUNCTION__, rc);
+      printf("<%s> rc<%d> \n", __FUNCTION__, rc);
       if (rc <= 0)
           return 0;
       else

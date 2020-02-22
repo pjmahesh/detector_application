@@ -51,7 +51,7 @@ for (( x=1 ; x<$# ; x++ )) ; do
   done
 done
 
-echo -e "Args verified ..."
+echo -e "\nArgs verified ..."
 
 for (( x=1 ; x<$# ; x++ )) ; do
   tty=$(ls -l /dev/serial/by-id | grep -n "${!x}" | tail -c 8)
@@ -88,9 +88,9 @@ min_end="${min:1:1}"
 
 if [ "$min_end" -eq ${@: -1} ] ; then
     echo -e "\nCapture starting ..."
-    cmd_dprep="python3 dataprep.py"
+    #cmd_dprep="python3 dataprep.py"
     for (( x=1 ; x<$# ; x++ )) ; do
-        echo -e "\nExecuting ..."
+        echo -e "\nCapturing from ${!x} ..."
         if [ -e "/dev/${DEVS[$x]}" ] ; then
           echo -e "$(tput setaf 2)Port ""${DEVS[$x]}"" - OK$(tput sgr 0)"
           #eval "$cmd"
@@ -111,22 +111,22 @@ if [ "$min_end" -eq ${@: -1} ] ; then
           exit 0
         else
           echo -e "$(tput setaf 2)Capture and transfer took: $(($capp_time / 60)) min $(($capp_time % 60)) sec$(tput sgr 0)"
-          cmd="python3 sort_script.py ${!x}.jpg"
-          echo -e "Executing image backup script ..."
-          echo "$cmd"
-          eval "$cmd"
-          echo -e "Execution success!!"
-          cmd_dprep+=" ""${!x}.jpg" #${cam02}.jpg ${wisetty}"
+          cmd_dprep="python3 dataprep.py "
+          cmd_dprep+="${!x}.jpg ""${wisetty}"
+          echo -e "Analysing images for water level ...\nExecuting ..."
+          echo "$cmd_dprep"
+          resp=$($cmd_dprep | tee /dev/stderr | grep -c "detected")
+          #echo -e "Grep pattern occurance: ${resp}"
+          if [[ $resp -gt 0  ]]; then
+            break
+          fi
         fi
     done
-    echo -e "\nAnalysing images for water level ...\nExecuting ..."
-    cmd_dprep+=" ""${wisetty}"
-    echo "$cmd_dprep"
-    eval "$cmd_dprep"
+
 else
   echo "Time ends other! Time argument doesn't match also review \"crontab -e\"!"
   echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
 fi
 
 duration=$SECONDS
-echo "Time elapsed: $(($duration / 60)) min $(($duration % 60)) sec"
+echo -e "\nTime elapsed: $(($duration / 60)) min $(($duration % 60)) sec"

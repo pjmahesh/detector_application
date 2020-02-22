@@ -1,20 +1,83 @@
 import glob, os
 import csv
+import time
+from datetime import datetime
 from PIL import Image
 import numpy as np
 import random
 import sys
+import os.path
+import os.path
+from os import path
 import pandas as pd
 from scipy import ndimage
 from scipy import stats
-import serial
-
-# import tf2api as tf2x
-# from tf2api.tfrecords import ds
+from shutil import copyfile
+import shutil
+Image.LOAD_TRUNCATED_IMAGES = True
 
 wisetty = '/dev/' + sys.argv[len(sys.argv) - 1]
-baud=38400
-#Two image names + node's tty will be received as arguments
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+def log_to_html_csv( level_cm , ts ):
+    level_log='/var/www/html/level_log.csv'
+    if not os.path.exists(level_log):
+        os.system('touch ' + level_log)
+
+    with open(level_log, 'a') as file:
+        writer = csv.writer(file)
+        writer.writerow([ "TS", ts , "Level" , level_cm*10 ])
+        file.close()
+        print( bcolors.OKBLUE + "Saved values to:\n" + bcolors.ENDC + level_log )
+
+    out = shutil.copy(level_log , './' )
+    print(bcolors.OKBLUE + "Saved duplicate file to pwd:\n" + bcolors.ENDC + out )
+
+def sort_and_save(IMGFILE):
+    IMGNAME = IMGFILE.split(".")[0]
+
+    curr_time, secs, min, dt = 0, 0, 0, 0
+    curr_time = datetime.now()
+    secs = int (curr_time.strftime('%S'))
+    min = int (curr_time.strftime('%M'))
+    dt = curr_time.strftime('%Y%m%d_%H%M%S')
+
+    dest_bkp = './Images/' + curr_time.strftime("%Y%m%d_%H%M%S") + "_" + IMGNAME + '/'
+    dest_html = '/var/www/html/'
+    fname = curr_time.strftime("%Y%m%d_%H%M%S") + "_" + IMGFILE
+
+    if path.isdir('./Images') != True:
+       os.mkdir('./Images')
+
+    if os.path.exists("./"+IMGFILE):
+       try:
+           os.mkdir(dest)
+       except:
+            pass
+       temp=Image.open(IMGFILE)
+       rotated=temp.rotate(270, expand=True)
+       os.makedirs(dest_bkp)
+       rotated.save(dest_bkp + fname)
+       #out = shutil.copy(IMGFILE , dest_bkp + fname)
+       print( bcolors.OKBLUE + 'Rotated and saved detected image:\n' + bcolors.ENDC + IMGFILE + ' to ' + dest_bkp + fname)
+       rotated.save(dest_html + 'latest.jpg')
+       #out = shutil.copy(IMGFILE , dest_html + 'latest.jpg' )
+       print(bcolors.OKBLUE + 'Rotated and saved detected image:\n' + bcolors.ENDC + IMGFILE + ' to ' + dest_html + 'latest.jpg' )
+
+    else:
+        print( bcolors.WARNING + 'Error: ' + bcolors.ENDC + IMGFILE + ' does not exist!')
+
+    return dt
+
 
 
 for loop in range(1, len(sys.argv)-1):
@@ -38,6 +101,7 @@ for loop in range(1, len(sys.argv)-1):
     r_dev=confDict['red'][1]
     g_dev=confDict['green'][1]
     b_dev=confDict['blue'][1]
+
 
     curr=ndimage.rotate(np.array(Image.open(photo)), 270)
 
@@ -76,29 +140,32 @@ for loop in range(1, len(sys.argv)-1):
         rng=max_scale-min_scale
 
         rows=curr.shape[0]
-        scale=list(np.arange(min_scale,max_scale,rng/rows))
+        scale=list(np.arange(min_scale,max_scale,rng/rows))[:rows]
         rows=list(range(rows))
         scale.reverse()
         offset=offDict['levelOff']
-        level_cm = np.interp(level,rows,scale)-offset
-        print("Water level detected in " + photo)
-        #print(str (level) + ' pixels, ')
+        level_cm = np.interp(level,rows,scale) - offset
 
-        print(str (level_cm - 0.5) + ' cm - ' + str (level_cm) + ' cm' )
+        print( bcolors.OKGREEN + 'Water level detected in '+ photo + ':' )
+        print( str (level_cm - 0.5) + ' cm - ' + str (level_cm) + ' cm' + bcolors.ENDC )
+
+        #print('\nCalling sort_and_save ...')
+        ts = sort_and_save(photo)
+
+        #print('\nCalling log_to_html_csv ... ')
+        log_to_html_csv(level_cm , ts)
+
         if os.path.exists(wisetty):
            ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
-           #subprocess.call([ifserver_cmd])
            os.system(ifserver_cmd)
-           print ("\033[92mWSN Port : " + sys.argv[len(sys.argv) - 1 ] + " - OK\033[0m\nPassed to camera_if_server.!")
         else:
            print ("WSN port not detectable now. Check USB connections or reboot Linux")
            sys.exit()
-
         break
 
-
     else:
-        print('No water level in image - ' + photo)
+        print( bcolors.WARNING + 'No water level in image - ' + photo + bcolors.ENDC )
         level_cm = 1000
-        ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 ) #sending a junk level!
+        print('Sending a junk level to WSN!')
+        ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
         os.system(ifserver_cmd)
