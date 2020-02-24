@@ -1,13 +1,13 @@
 /*********
-  mahesh@wisense.in
+  mahesh@wisense.in - 24 Feb 2020
   
 > Add Espressif boards https://dl.espressif.com/dl/package_esp32_index.json, http://arduino.esp8266.com/stable/package_esp8266com_index.json
   File > Preferences > Additional Board Manager URLs
 > Add Espressif board. Saerch Esp at Tools > Boards > Board Manager 
 > Add https://github.com/me-no-dev/AsyncTCP to User > Documents > Arduono > library folder
 > Add https://github.com/me-no-dev/ESPAsyncWebServer/ to User > Documents > Arduono > library folder
-> Select board as "AI Thinker ESPCAM".
-> Select PORT.
+> Select board as "ESP32 Wrover Module" variable upload baudrates (or) "AI Thinker ESPCAM" for default 921600 upload baudrate.
+> Select PORT. Select upload baudrate if selected "ESP32 Wrover Module" - 115200 if using Arduino/Launchpad as USB to TTL
 > Connect
   TX(FTDI) to U0R(ESPCAM)
   RX(FTDI) to U0T(ESPCAM)
