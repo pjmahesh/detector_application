@@ -156,7 +156,8 @@ for loop in range(1, len(sys.argv)-1):
         log_to_html_csv(level_cm , ts)
 
         if os.path.exists(wisetty):
-           ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
+           print (str (level_cm * 10.0 ))
+           ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10.0 )
            os.system(ifserver_cmd)
         else:
            print ("WSN port not detectable now. Check USB connections or reboot Linux")
@@ -167,5 +168,5 @@ for loop in range(1, len(sys.argv)-1):
         print( bcolors.WARNING + 'No water level in image - ' + photo + bcolors.ENDC )
         level_cm = 1000
         print('Sending a junk level to WSN!')
-        ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10 )
+        ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10.0 )
         os.system(ifserver_cmd)
