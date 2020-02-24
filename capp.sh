@@ -3,7 +3,12 @@
 #cd /home/pi/detector_application
 
 cd "$(dirname "$0")"
+<<<<<<< HEAD
 echo -e "\npwd is : ""$(pwd)"
+=======
+echo "pwd is : "
+echo $(pwd)
+>>>>>>> f14c728c6e6b5ad596090de6a008af2d75518fa1
 
 SECONDS=0
 
