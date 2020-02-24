@@ -156,7 +156,6 @@ for loop in range(1, len(sys.argv)-1):
         log_to_html_csv(level_cm , ts)
 
         if os.path.exists(wisetty):
-           print (str (level_cm * 10.0 ))
            ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10.0 )
            os.system(ifserver_cmd)
         else:
