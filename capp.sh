@@ -1,8 +1,10 @@
 #!/bin/bash
 
-cd /home/pi/detector_application
+#cd /home/pi/detector_application
 
-#echo $(pwd)
+cd "$(dirname "$0")"
+echo "pwd is : "
+echo $(pwd)
 
 SECONDS=0
 
