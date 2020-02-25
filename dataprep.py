@@ -28,16 +28,22 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-def log_to_html_csv( level_cm , ts ):
-    level_log='/var/www/html/level_log.csv'
+def log_to_html_csv( level_cm , ts , cam):
+    level_log = '/var/www/html/level_log.csv'
+    level_txt = '/var/www/html/level.txt'
     if not os.path.exists(level_log):
         os.system('touch ' + level_log)
 
     with open(level_log, 'a') as file:
         writer = csv.writer(file)
-        writer.writerow([ "TS", ts , "Level" , level_cm*10 ])
+        writer.writerow([ "TS", str(ts) , "Level" , level_cm*10 ])
         file.close()
         print( bcolors.OKBLUE + "Saved values to:\n" + bcolors.ENDC + level_log )
+
+    with open(level_txt, 'a') as file:
+        file.write(str (ts) + ' ' + str (round(level_cm*10, 2)) + 'mm ' + cam + '\n')
+        file.close()
+        print( bcolors.OKBLUE + "Saved values to:\n" + bcolors.ENDC + level_txt )
 
     out = shutil.copy(level_log , './' )
     print(bcolors.OKBLUE + "Saved duplicate file to pwd:\n" + bcolors.ENDC + out )
@@ -76,7 +82,8 @@ def sort_and_save(IMGFILE):
     else:
         print( bcolors.WARNING + 'Error: ' + bcolors.ENDC + IMGFILE + ' does not exist!')
 
-    return dt
+    file_ts = datetime.strptime(dt, "%Y%m%d_%H%M%S")
+    return file_ts
 
 
 
@@ -153,10 +160,10 @@ for loop in range(1, len(sys.argv)-1):
         ts = sort_and_save(photo)
 
         #print('\nCalling log_to_html_csv ... ')
-        log_to_html_csv(level_cm , ts)
+        log_to_html_csv(level_cm , ts , sys.argv[loop])
 
         if os.path.exists(wisetty):
-           print (str (level_cm * 10.0 ))
+           #print (str (level_cm * 10.0 ))
            ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10.0 )
            os.system(ifserver_cmd)
         else:

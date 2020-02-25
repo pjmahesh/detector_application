@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta http-equiv="refresh" content="10">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+<style>
+
+body {
+  font-family: Arial;
+  color: white;
+  margin: 0;
+  height: 100%;
+  overflow: hidden
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  left: 0;
+  background-color: #EFEFF0;
+}
+
+.right {
+  right: 0;
+  background-color: #EFEFF0;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+  background-color: white;
+  text-align: center;
+  font-family: arial;
+  max-width: 350px;
+  border-radius: 2%;
+  position: absolute;
+  background-position: 50% 50%;
+  top: 15%;
+  left: 40%;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+  border-radius: 5%;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+
+.centered {
+  position: absolute;
+  top: 15%;
+  left: 12%;
+  text-align: center;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+.centered img {
+  width: 262px;
+  border-radius: 2%;
+  background-position: 50% 50%;
+}
+
+</style>
+</head>
+<body>
+<div class="split right">
+  <div class="centered">
+    <img src="latest.jpg" alt="Detected Level">
+    <h2 style="color:black">Detected Segment</h2>
+    <hr>
+  </div>
+</div>
+
+<div class="split left">
+  <div class="card">
+    <h2 style="color:black">Agrinik</h2>
+    <p class="title">Level log:</p>
+    <iframe src="level.txt" width=330 height=250 frameborder=0>
+    </iframe>
+    <p class="title"></p>
+    <a href="."><button>Refresh</button></a>
+  </div>
+</div>
+
+</body>
+</html>
