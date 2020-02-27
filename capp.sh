@@ -19,7 +19,7 @@ declare -a DEVS=()
 
 if [ $# -lt 2 ] ; then
    echo "Insufficient arguments!"
-   echo -e "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
+   echo -e "Usage: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
    exit 0
 fi
 
@@ -28,13 +28,13 @@ fi
 re='^[0-9]+$'
 if [[ ! "${@: -1}" =~ $re ]] || [ ${@: -1} -gt 9 ]  ; then
    echo "Time argument invalid!"
-   echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
+   echo "Usage: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
    exit 0
 fi
 
 if [ $# -gt 5 ] ; then
    echo "Max devices four! (or) Extra arguments present!"
-   echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
+   echo "Usage: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
    exit 0
 fi
 
@@ -46,7 +46,7 @@ for (( x=1 ; x<$# ; x++ )) ; do
     #echo -e "${!x}""-""${!y}"
     if [ "${!x}" == "${!y}" ] && [ "$x" != "$y" ] ; then
        echo -e "Duplicate device names not allowed! - ""${!x}"
-       echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
+       echo "Usage: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
        exit 0
     fi
   done
@@ -126,7 +126,7 @@ if [ "$min_end" -eq ${@: -1} ] ; then
 
 else
   echo "Time ends other! Time argument doesn't match also review \"crontab -e\"!"
-  echo "Prototype: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
+  echo "Usage: $ ./capp.sh <device01> <device02> <device03> <device04> <time>"
 fi
 
 duration=$SECONDS
