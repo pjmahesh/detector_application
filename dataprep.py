@@ -34,6 +34,9 @@ def log_to_html_csv( level_cm , ts , cam):
     if not os.path.exists(level_log):
         os.system('touch ' + level_log)
 
+    if not os.path.exists(level_txt):
+        os.system('touch ' + level_txt)
+
     with open(level_log, 'a') as file:
         writer = csv.writer(file)
         writer.writerow([ "TS", str(ts) , "Level" , level_cm*10 ])
