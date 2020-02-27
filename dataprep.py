@@ -40,8 +40,12 @@ def log_to_html_csv( level_cm , ts , cam):
         file.close()
         print( bcolors.OKBLUE + "Saved values to:\n" + bcolors.ENDC + level_log )
 
-    with open(level_txt, 'a') as file:
+    with open(level_txt, 'r+') as file:
+        lines = file.readlines()
+        file.seek(0)
         file.write(str (ts) + ' ' + str (round(level_cm*10, 2)) + 'mm ' + cam + '\n')
+        for line in lines: # write old content after new
+            file.write(line)
         file.close()
         print( bcolors.OKBLUE + "Saved values to:\n" + bcolors.ENDC + level_txt )
 
@@ -163,10 +167,7 @@ for loop in range(1, len(sys.argv)-1):
         log_to_html_csv(level_cm , ts , sys.argv[loop])
 
         if os.path.exists(wisetty):
-<<<<<<< HEAD
            #print (str (level_cm * 10.0 ))
-=======
->>>>>>> e974aa70e2c8b4b46cdaafcb2dc7dd7098ba4407
            ifserver_cmd = "./camera_if_sim.out " + str (level_cm * 10.0 )
            os.system(ifserver_cmd)
         else:
